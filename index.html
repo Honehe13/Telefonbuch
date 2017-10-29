@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="de" data-framework="angularjs">
+	<head>
+		<meta charset="utf-8">
+		<title>Fingerübung • Telefonbuch</title>
+		<link rel="stylesheet" href="node_modules/todomvc-app-css/index.css">
+	</head>
+	<body >
+	<div ng-app="phonebook" ng-controller="phoneCtrl" id="phoneapp">
+		<h1>Telefonbuch</h1>
+		 <input id="filter" placeholder="Suche (Name oder Nummer)" ng-model="suchfilter" autofocus> 
+		 <button ng-click="showAddItem()" ng-show="!showAdd">Neuen Eintrag hinzufügen</button>
+		<form ng-show="showAdd" ng-submit="addItem()">
+			<input id="inName" placeholder="Name" ng-model="inName"/>
+			<input id="inNumber" placeholder="Telefonnummer" ng-model="inNumber"/>
+			<input type="submit" value="Hinzufügen"/>
+		</form>
+		<table >
+			<tr>
+				<th>Name</th>
+				<th>Telefonnummer</th>
+			</tr>
+			<tr ng-repeat="x in entries |filter:suchfilter" >			
+				<td id="tdName" ng-dblclick="editName(x)">{{x.name}}
+					<span class="tooltiptext">Hinzugefügt am {{x.date}}</span>
+				</td>
+				<td id="tdNumber">{{x.number}}
+					<span class="tooltiptext">Hinzugefügt am {{x.date}}</span>
+					<button class="delete" ng-click="removeItem(x)"></button>					
+				</td>
+			<!--	<div class="tooltip">{{x.name}}
+					<span class="tooltiptext">Hinzugefügt am {{x.date}}</span>
+				</div>
+				<td><p ng-click="removeItem($index)">x</p></td> -->
+				
+			</tr>
+		</table>		
+		
+		</div>
+		
+		<script src="node_modules/todomvc-common/base.js"></script>
+		<script src="node_modules/angular/angular.js"></script>
+		<script src="node_modules/angular-route/angular-route.js"></script>
+		<script src="node_modules/angular-resource/angular-resource.js"></script>
+		<script src="js/moment.js"></script>
+		<script src="js/angular-moment.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/controllers/phoneCtrl.js"></script>
+		<script src="js/services/todoStorage.js"></script>
+		<script src="js/directives/todoFocus.js"></script>
+		<script src="js/directives/todoEscape.js"></script>
+	</body>
+</html>
