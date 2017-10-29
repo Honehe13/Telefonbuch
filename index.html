@@ -16,25 +16,47 @@
 			<input type="submit" value="Hinzufügen"/>
 		</form>
 		<table >
-			<tr>
+			<thead>
 				<th>Name</th>
 				<th>Telefonnummer</th>
-			</tr>
-			<tr ng-repeat="x in entries |filter:suchfilter" >			
-				<td id="tdName" ng-dblclick="editName(x)">{{x.name}}
+			</thead>
+			<tbody>
+			
+				<tr ng-repeat="x in phonebook.entries |filter:suchfilter" ng-include="getTemplate(x)"/>			
+			</tbody>
+		</table>	
+		<script type="text/ng-template" id="display">		
+				<td id="tdName" ng-dblclick="editName(x)" >{{x.name}}
 					<span class="tooltiptext">Hinzugefügt am {{x.date}}</span>
 				</td>
-				<td id="tdNumber">{{x.number}}
+				<td id="tdNumber" ng-dblclick="editNumber(x)">{{x.number}}					
+					<button class="delete" ng-click="removeItem($index)"></button>					
+				</td>			
+		</script>
+		
+		<script type="text/ng-template" id="editName">		
+				<td id="tdName">
+				<form ng-submit="save($index)">
+				<input type="text" ng-model="phonebook.selected.name" />
+				</form>
 					<span class="tooltiptext">Hinzugefügt am {{x.date}}</span>
-					<button class="delete" ng-click="removeItem(x)"></button>					
 				</td>
-			<!--	<div class="tooltip">{{x.name}}
+				<td id="tdNumber">{{x.number}}					
+					<button class="delete" ng-click="removeItem($index)"></button>					
+				</td>			
+		</script>
+		
+		<script type="text/ng-template" id="editNumber">		
+				<td id="tdName" ng-dblclick="editName(x)" >{{x.name}}
 					<span class="tooltiptext">Hinzugefügt am {{x.date}}</span>
-				</div>
-				<td><p ng-click="removeItem($index)">x</p></td> -->
-				
-			</tr>
-		</table>		
+				</td>
+				<td id="tdNumber">
+				<form ng-submit="save($index)">
+				<input type="text" ng-model="phonebook.selected.number"/>
+				</form>
+					<button class="delete" ng-click="removeItem($index)"></button>					
+				</td>		
+		</script>
 		
 		</div>
 		
