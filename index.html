@@ -8,23 +8,30 @@
 	<body >
 	<div ng-app="phonebook" ng-controller="phoneCtrl" id="phoneapp">
 		<h1>Telefonbuch</h1>
+		<!-- Textfeld zum Suchen. Benutzt die Variable suchfilter. Diese wird in der Tabelle als Filter benutzt -->
 		 <input id="filter" placeholder="Suche (Name oder Nummer)" ng-model="suchfilter" autofocus> 
+		 <!-- Eintragen neuer Einträge. Der Button macht zwei Input-Felder Sichtbar -->
 		 <button ng-click="showAddItem()" ng-show="!showAdd">Neuen Eintrag hinzufügen</button>
-		<form ng-show="showAdd" ng-submit="addItem()">
+		<form ng-show="showAdd" ng-submit="addItem()"> <!-- addItem fügt die Werte von inName und inNumber als neue Zeile in das Entry-Objekt -->
 			<input id="inName" placeholder="Name" ng-model="inName"/>
 			<input id="inNumber" placeholder="Telefonnummer" ng-model="inNumber"/>
 			<input type="submit" value="Hinzufügen"/>
 		</form>
+		
+		<!-- Tabelle in der alle Einträge angezeigt werden -->
 		<table >
 			<thead>
 				<th>Name</th>
 				<th>Telefonnummer</th>
 			</thead>
-			<tbody>
-			
+			<tbody>			
+			<!-- Jeder Entry aus dem Telefonbuch wird als neue Zeile hinzugefügt. -->
 				<tr ng-repeat="x in phonebook.entries |filter:suchfilter" ng-include="getTemplate(x)"/>			
 			</tbody>
 		</table>	
+		
+		<!-- Templates für die Zeilen der Tabelle -->
+		<!-- Normale Tabellenansicht -->
 		<script type="text/ng-template" id="display">		
 				<td id="tdName" ng-dblclick="editName(x)" >{{x.name}}
 					<span class="tooltiptext">Hinzugefügt am {{x.date}}</span>
@@ -33,7 +40,7 @@
 					<button class="delete" ng-click="removeItem($index)"></button>					
 				</td>			
 		</script>
-		
+		<!-- Name der ausgewählten Zeile wird als Textbox dargestellt. Zum editieren -->
 		<script type="text/ng-template" id="editName">		
 				<td id="tdName">
 				<form ng-submit="save($index)">
@@ -45,7 +52,7 @@
 					<button class="delete" ng-click="removeItem($index)"></button>					
 				</td>			
 		</script>
-		
+		<!-- Nummer der ausgewählten Zeile wird als Textbox dargestellt. Zum editieren -->
 		<script type="text/ng-template" id="editNumber">		
 				<td id="tdName" ng-dblclick="editName(x)" >{{x.name}}
 					<span class="tooltiptext">Hinzugefügt am {{x.date}}</span>
