@@ -1,17 +1,31 @@
 
-app.controller('phoneCtrl', ['$scope', 'moment',  function($scope,moment) 
+app.controller('phoneCtrl', ['$scope', 'moment',   function($scope,moment) 
 {
+	$scope.phonebook ={};
+	$scope.lastid='3';
 	
-    $scope.phonebook = 
+	if(!localStorage.getItem("phonebook"))
 	{
-		entries:[
-	{id:1, name:'André',number:'05507401436',date:moment('2017-10-28').format('L')},
-	{id:2, name:'Peter',number:'0551501555',date:moment('2017-10-28').format('L')},
-	{id:3,name:'Frauke',number:'05518015',date:moment('2017-10-28').format('L')},
-	],
-	selected:{}
-	};
-	$scope.lastid = 3;
+		$scope.phonebook = 
+		{
+			entries:[
+				{id:'1', name:'André',number:'05507401436',date:moment('2017-10-28').format('L')},
+				{id:'2', name:'Peter',number:'0551501555',date:moment('2017-10-28').format('L')},
+				{id:'3', name:'Frauke',number:'05518015',date:moment('2017-10-28').format('L')},
+			],
+			selected:{}
+		};
+		$scope.lastid = '3';
+	}
+	else
+	{
+		$scope.phonebook = JSON.parse(localStorage.getItem("phonebook"));		
+		$scope.lastid = localStorage.getItem('lastID');
+	}
+	
+	
+	
+	
 	
 	$scope.showAdd = false;
 	$scope.inName = '';
@@ -23,7 +37,8 @@ app.controller('phoneCtrl', ['$scope', 'moment',  function($scope,moment)
 	{
 		if($scope.inName != '' && $scope.inNumber != '')
 		{
-			$scope.lastid = $scope.lastid+1;
+			var id = parseInt($scope.lastid)+1;
+			$scope.lastid = id.toString();
 			$scope.phonebook.entries.push({id: $scope.lastid,
 								name: $scope.inName,
 								number: $scope.inNumber,
@@ -31,16 +46,16 @@ app.controller('phoneCtrl', ['$scope', 'moment',  function($scope,moment)
 			
 								
 			$scope.inName = '';
-			$scope.inNumber = '';
-								
-								
+			$scope.inNumber = '';		
+			saveToLocal();				
 		}
 		$scope.showAdd = !$scope.showAdd;
 	};
 	
 	$scope.removeItem = function(x)
 	{
-		$scope.phonebook.entries.splice(x,1); //entfernt ab X  "1" Item aus dem Array und gibt das array zurück.
+		$scope.phonebook.entries.splice(x,1); //entfernt ab X  "1" Item aus dem Array und gibt das array zurück.	
+		saveToLocal();	
 	};
 	
 	$scope.editName = function(x)
@@ -60,7 +75,16 @@ app.controller('phoneCtrl', ['$scope', 'moment',  function($scope,moment)
 		$scope.phonebook.selected = {};
 		$scope.showEditName = false;
 		$scope.showEditNumber = false;
+				
+	    saveToLocal();			
+		
 	};
+	
+	function saveToLocal()
+	{
+		localStorage.setItem('phonebook',angular.toJson($scope.phonebook)); //Nicht JSON.stringify!
+		localStorage.setItem('lastID',$scope.lastid);
+	}
 	
 	$scope.showAddItem = function()
 	{
@@ -80,4 +104,9 @@ app.controller('phoneCtrl', ['$scope', 'moment',  function($scope,moment)
         else 
 			return 'display';
     };
+	
+	$scope.clearStorage = function()
+	{
+		localStorage.clear();
+	}
 }]);
